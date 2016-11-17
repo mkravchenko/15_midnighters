@@ -18,5 +18,5 @@ timurgosu 		02:47:48.009767 		Europe/Moscow<br />
 timurgosu 		01:27:12.691486 		Europe/Moscow<br />
 ЕвгенийВасильев 		00:37:35 		Europe/Moscow<br />
 oleg.smedyuk 		00:18:00 		Europe/Moscow<br />
-<b>...               ...                  ...</b>
+<b>...               ...                  ...</b><br />
 beastrock 		01:08:05.288551 		Europe/Moscow<br />
