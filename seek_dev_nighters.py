@@ -28,9 +28,9 @@ def load_attempts():
 
 
 def is_midnighter_current_user(time_z):
-    t1 = d.time(0, 0, 0)
-    t2 = d.time(6, 0, 0)
-    return True if t1 < time_z < t2 else False
+    time_of_night_start = d.time(0, 0, 0)
+    time_of_night_finish = d.time(6, 0, 0)
+    return True if time_of_night_start < time_z < time_of_night_finish else False
 
 
 def get_number_of_pages():
