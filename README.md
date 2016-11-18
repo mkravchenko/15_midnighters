@@ -4,7 +4,7 @@ This script prints users from site devman.com that commits their code between 00
 
 # How to run:<br />
 1. Run the script:<br />
-py -3 seek_dev_nighters.py.py <br />
+py -3 seek_dev_nighters.py <br />
 
 #Results:
 Midnight users are:<br />
