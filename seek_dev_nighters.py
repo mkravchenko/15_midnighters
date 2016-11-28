@@ -30,7 +30,7 @@ def load_attempts():
 def is_midnighter_current_user(time_z):
     time_of_night_start = d.time(0, 0, 0)
     time_of_night_finish = d.time(6, 0, 0)
-    return True if time_of_night_start < time_z < time_of_night_finish else False
+    return bool(time_of_night_start < time_z < time_of_night_finish)
 
 
 def get_number_of_pages():
@@ -41,12 +41,12 @@ def get_number_of_pages():
     return int(number_of_pages)
 
 
-def print_midnighters():
-    attempt = load_attempts()
+def print_midnighters(attempt):
     print("Midnight users are:\n{0} \t\t{1} \t\t{2}".format('Username', 'Timestamp', 'Timezone'))
     for params in attempt:
         print("{0} \t\t{1} \t\t{2}".format(params['username'], params['timestamp'], params['timezone']))
 
 
 if __name__ == '__main__':
-    print_midnighters()
+    attempt = load_attempts()
+    print_midnighters(attempt)
