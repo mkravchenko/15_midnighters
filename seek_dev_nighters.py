@@ -7,30 +7,39 @@ from datetime import datetime
 DEV_URL = 'http://devman.org/api/challenges/solution_attempts/'
 
 
-def load_attempts():
-    pages = get_number_of_pages()
+def load_attempts(pages):
     for page in range(1, pages + 1):
-        payload = {"page": page}
-        response = requests.get(DEV_URL, params=payload).json()
+        response = get_json_response_by_page_number(page)
         for records in response['records']:
-            user_name = records['username']
             timestamp = records['timestamp']
             time_zone = records['timezone']
-            if timestamp and time_zone:
-                commit_time = utc.localize(datetime.utcfromtimestamp(timestamp)).astimezone(timezone(time_zone)).time()
-                is_midnighter = is_midnighter_current_user(commit_time)
-                if is_midnighter:
-                    yield {
-                        'username': user_name,
-                        'timestamp': commit_time,
-                        'timezone': time_zone,
-                    }
+            commit_time = get_commit_time(timestamp, time_zone)
+            is_midnighter = is_midnighter_current_user(commit_time)
+            if is_midnighter:
+                yield {
+                    'username': records['username'],
+                    'timestamp': commit_time,
+                    'timezone': time_zone,
+                }
+
+
+def get_json_response_by_page_number(page):
+    payload = {"page": page}
+    return requests.get(DEV_URL, params=payload).json()
+
+
+def get_commit_time(timestamp, time_zone):
+    if timestamp and time_zone:
+        return utc.localize(datetime.utcfromtimestamp(timestamp)).astimezone(timezone(time_zone)).time()
+    return None
 
 
 def is_midnighter_current_user(time_z):
-    time_of_night_start = d.time(0, 0, 0)
-    time_of_night_finish = d.time(6, 0, 0)
-    return bool(time_of_night_start < time_z < time_of_night_finish)
+    if time_z:
+        time_of_night_start = d.time(0, 0, 0)
+        time_of_night_finish = d.time(6, 0, 0)
+        return bool(time_of_night_start < time_z < time_of_night_finish)
+    return False
 
 
 def get_number_of_pages():
@@ -41,12 +50,13 @@ def get_number_of_pages():
     return int(number_of_pages)
 
 
-def print_midnighters(attempt):
+def print_midnighters(attempts_l):
     print("Midnight users are:\n{0} \t\t{1} \t\t{2}".format('Username', 'Timestamp', 'Timezone'))
-    for params in attempt:
+    for params in attempts_l:
         print("{0} \t\t{1} \t\t{2}".format(params['username'], params['timestamp'], params['timezone']))
 
 
 if __name__ == '__main__':
-    attempt = load_attempts()
-    print_midnighters(attempt)
+    number_of_pages = get_number_of_pages()
+    attempts = load_attempts(number_of_pages)
+    print_midnighters(attempts)
